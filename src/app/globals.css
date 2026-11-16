@@ -1,26 +1,322 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  AI Founders Lab design system
+  -----------------------------
+  Ink on paper, one signal colour. Serif display, grotesque text, mono labels.
+  Sharp corners, hairline rules, numbered sections. See /brand for the full guide.
+*/
+
+@theme {
+  --color-paper: #f3efe6;
+  --color-bone: #e9e4d8;
+  --color-ink: #11110f;
+  --color-ink-soft: #2b2b27;
+  --color-muted: #66635a;
+  --color-muted-dark: #a9a59a;
+  --color-line: #d3cdbf;
+  --color-line-dark: #34342f;
+  --color-signal: #e8421a;
+  --color-signal-deep: #b3300d;
+  --color-ok: #1f6b45;
+
+  --font-display: "Fraunces Variable", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --text-display-xl: clamp(3.25rem, 9.2vw, 9rem);
+  --text-display-lg: clamp(2.5rem, 6vw, 5.25rem);
+  --text-display-md: clamp(2rem, 4vw, 3.25rem);
+  --text-display-sm: clamp(1.5rem, 2.4vw, 2rem);
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 84rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .wrap {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Display type: Fraunces at its largest optical size, set tight. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 380;
+    font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 0;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+  }
+  .display-xl {
+    font-size: var(--text-display-xl);
+    line-height: 0.9;
+  }
+  .display-lg {
+    font-size: var(--text-display-lg);
+  }
+  .display-md {
+    font-size: var(--text-display-md);
+    line-height: 1.02;
+  }
+  .display-sm {
+    font-size: var(--text-display-sm);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .display em,
+  .display i {
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 1;
+  }
+
+  /* Mono label used for eyebrows, indices and metadata. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .lede {
+    font-size: clamp(1.125rem, 1.5vw, 1.375rem);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  .link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color 150ms;
+  }
+  .link:hover {
+    color: var(--color-signal-deep);
+  }
+  .on-ink .link:hover {
+    color: var(--color-signal);
+  }
+
+  /* Dark sections */
+  .on-ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* Corner ticks for figures and diagrams */
+  .ticks {
+    position: relative;
+  }
+  .ticks::before,
+  .ticks::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: currentColor;
+    border-style: solid;
+    opacity: 0.55;
+  }
+  .ticks::before {
+    top: 0;
+    left: 0;
+    border-width: 1px 0 0 1px;
+  }
+  .ticks::after {
+    right: 0;
+    bottom: 0;
+    border-width: 0 1px 1px 0;
+  }
+
+  /* Long-form content rendered from Markdown */
+  .prose-afl {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    max-width: 42rem;
+  }
+  .prose-afl > * + * {
+    margin-top: 1.15em;
+  }
+  .prose-afl h2 {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 72;
+    font-weight: 420;
+    font-size: 1.75rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-top: 2.2em;
+  }
+  .prose-afl h3 {
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-top: 1.8em;
+  }
+  .prose-afl ul,
+  .prose-afl ol {
+    padding-left: 1.25rem;
+  }
+  .prose-afl ul {
+    list-style: square;
+  }
+  .prose-afl ol {
+    list-style: decimal;
+  }
+  .prose-afl li + li {
+    margin-top: 0.5em;
+  }
+  .prose-afl li::marker {
+    color: var(--color-signal-deep);
+  }
+  .prose-afl a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .prose-afl a:hover {
+    color: var(--color-signal-deep);
+  }
+  .prose-afl strong {
+    font-weight: 600;
+  }
+  .prose-afl blockquote {
+    border-left: 2px solid var(--color-signal);
+    padding-left: 1rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-style: italic;
+  }
+  .prose-afl code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-bone);
+    padding: 0.1em 0.3em;
+  }
+}
+
+.select-chevron {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5l5-5' stroke='%2311110f' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 12px 8px;
+}
+
+.check {
+  appearance: none;
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 55%, transparent);
+  background-color: rgb(255 255 255 / 0.5);
+  cursor: pointer;
+  transition: background-color 150ms, border-color 150ms;
+}
+.check:checked {
+  border-color: var(--color-ink);
+  background: var(--color-ink)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.5l3 3 6-7' stroke='%23f3efe6' stroke-width='2'/%3E%3C/svg%3E")
+    center / 100% no-repeat;
+}
+
+/* Scroll reveal. Content is visible by default; JS opts elements in. */
+[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 700ms var(--ease-out-quart),
+    transform 700ms var(--ease-out-quart);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.draw-line {
+  stroke-dasharray: var(--len, 1200);
+  stroke-dashoffset: var(--len, 1200);
+  animation: draw 1.8s var(--ease-out-quart) 0.2s forwards;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+.pulse-dot {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: pulse-dot 2.6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .draw-line {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .pulse-dot {
+    animation: none;
+    opacity: 0;
+  }
 }

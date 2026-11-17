@@ -2,10 +2,12 @@ import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/env";
 import type { Profile } from "@/lib/types";
 
 /** The signed-in user, verified with the auth server. Deduplicated per request. */
 export const getUser = cache(async () => {
+  if (!isSupabaseConfigured()) return null;
   const supabase = await createClient();
   const {
     data: { user },

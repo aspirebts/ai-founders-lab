@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured, notConfigured } from "@/lib/env";
 import {
   applicationSchema,
   consultationSchema,
@@ -24,6 +25,7 @@ function isBot(formData: FormData) {
 }
 
 export async function joinWaitlist(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const success: FormState = {
     status: "success",
     message: "You are on the list. We will email you when dates are announced.",
@@ -45,6 +47,7 @@ export async function joinWaitlist(_prev: FormState, formData: FormData): Promis
 }
 
 export async function subscribeNewsletter(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const success: FormState = { status: "success", message: "Subscribed. Look out for the next issue." };
   if (isBot(formData)) return success;
 
@@ -61,6 +64,7 @@ export async function subscribeNewsletter(_prev: FormState, formData: FormData):
 }
 
 export async function submitApplication(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const success: FormState = { status: "success" };
   if (isBot(formData)) return success;
 
@@ -85,6 +89,7 @@ export async function submitApplication(_prev: FormState, formData: FormData): P
 }
 
 export async function requestConsultation(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const success: FormState = {
     status: "success",
     message: "Request received. We will reply by email to arrange a time and confirm the fee.",
@@ -109,6 +114,7 @@ export async function requestConsultation(_prev: FormState, formData: FormData):
 }
 
 export async function sendContactMessage(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const success: FormState = { status: "success", message: "Message sent. We will reply by email." };
   if (isBot(formData)) return success;
 
@@ -125,6 +131,7 @@ export async function sendContactMessage(_prev: FormState, formData: FormData): 
 }
 
 export async function registerForEvent(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const success: FormState = {
     status: "success",
     message: "You are registered. Joining details will be sent to your email before the event.",

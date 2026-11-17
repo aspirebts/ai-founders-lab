@@ -30,3 +30,9 @@ export const env = {
 export function isSupabaseConfigured() {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 }
+
+/** Returned by form actions when the site has not been connected to its database yet. */
+export const notConfigured = {
+  status: "error" as const,
+  message: "This feature is not available yet: the site has not been connected to its database.",
+};

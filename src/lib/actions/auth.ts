@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured, notConfigured } from "@/lib/env";
 import { env } from "@/lib/env";
 import { forgotSchema, loginSchema, parseForm, registerSchema, resetSchema } from "@/lib/validation";
 import type { FormState } from "@/lib/types";
@@ -13,6 +14,7 @@ function safeNext(value: FormDataEntryValue | null, fallback = "/portal") {
 }
 
 export async function register(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const { data, error } = parseForm(registerSchema, formData);
   if (error) return error;
 
@@ -51,6 +53,7 @@ export async function register(_prev: FormState, formData: FormData): Promise<Fo
 }
 
 export async function login(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const { data, error } = parseForm(loginSchema, formData);
   if (error) return error;
 
@@ -75,6 +78,7 @@ export async function logout() {
 }
 
 export async function requestPasswordReset(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const { data, error } = parseForm(forgotSchema, formData);
   if (error) return error;
 
@@ -92,6 +96,7 @@ export async function requestPasswordReset(_prev: FormState, formData: FormData)
 }
 
 export async function updatePassword(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (!isSupabaseConfigured()) return notConfigured;
   const { data, error } = parseForm(resetSchema, formData);
   if (error) return error;
 

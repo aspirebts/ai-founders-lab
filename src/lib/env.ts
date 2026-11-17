@@ -25,3 +25,8 @@ export const env = {
     return process.env.NEXT_PUBLIC_CONTACT_EMAIL || null;
   },
 };
+
+/** True when the Supabase variables are present. Lets the site build and serve its static pages without them. */
+export function isSupabaseConfigured() {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+}

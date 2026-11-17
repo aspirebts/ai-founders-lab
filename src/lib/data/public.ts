@@ -1,6 +1,7 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { createPublicClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/env";
 import type { EventRow, ResourceRow } from "@/lib/types";
 
 /**
@@ -13,6 +14,7 @@ export async function getUpcomingEvents(limit?: number): Promise<EventRow[]> {
   "use cache";
   cacheTag("events");
   cacheLife("minutes");
+  if (!isSupabaseConfigured()) return [];
 
   let query = createPublicClient()
     .from("events")
@@ -34,6 +36,7 @@ export async function getEventBySlug(slug: string): Promise<EventRow | null> {
   "use cache";
   cacheTag("events");
   cacheLife("minutes");
+  if (!isSupabaseConfigured()) return null;
 
   const { data } = await createPublicClient()
     .from("events")
@@ -51,6 +54,7 @@ export async function getPublicResources(): Promise<ResourceSummary[]> {
   "use cache";
   cacheTag("resources");
   cacheLife("minutes");
+  if (!isSupabaseConfigured()) return [];
 
   const { data, error } = await createPublicClient()
     .from("resources")
@@ -70,6 +74,7 @@ export async function getPublicResourceBySlug(slug: string): Promise<ResourceRow
   "use cache";
   cacheTag("resources");
   cacheLife("minutes");
+  if (!isSupabaseConfigured()) return null;
 
   const { data } = await createPublicClient()
     .from("resources")
